@@ -25,7 +25,7 @@ namespace PuassonGeneration
             {
                 var U = r.NextDouble();
 
-                t -= (Math.Log(U) / Math.Log(2)) / lambda;
+                t -= Math.Log(U, 2) / lambda;
                 if (t < T)
                     S.Add(t);
             }

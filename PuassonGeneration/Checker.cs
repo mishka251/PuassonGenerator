@@ -48,7 +48,7 @@ namespace PuassonGeneration
             }
             mid /= cnt;
 
-            
+
             var n_i = new List<double>();
             var n_i_old = new List<double>();
             List<int> i_list = new List<int>();
