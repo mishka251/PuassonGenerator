@@ -22,15 +22,16 @@ namespace PuassonGeneration
                 List<int> counts = new List<int>();
                 for (int i = 0; i < x.Count; i++)
                     counts.Add(1);
+
                 if (PuassonTest(x, counts))
-                    Console.WriteLine(name + " тест на распределение пройден");
+                    Console.WriteLine(name + " тест на распределение Пуассона пройден");
                 else
-                    Console.WriteLine(name + " тест на распределение не пройден");
+                    Console.WriteLine(name + " тест на распределение Пуассона не пройден");
             }
         }
         /// <summary>
         /// Проверка на соответствие распределению Пуассона на уровне значимости 0.05
-        /// СМ Гмурман (~250 страница)
+        /// СМ Гмурман (~280 страница)
         /// </summary>
         /// <param name="S">Список значений xn</param>
         /// <param name="Sn">Список частот значений n[i]</param>
@@ -48,16 +49,19 @@ namespace PuassonGeneration
             }
             mid /= cnt;
 
-
+            ///n[i] после объединения
             var n_i = new List<double>();
+            ///n[i]` после объединения вычисленные
             var n_i_old = new List<double>();
-            List<int> i_list = new List<int>();
+            
+            List<int> i_list = new List<int>();///список индексов для запоминания
             int count = 0;
             for (int i = 0; i < n; i++)
             {
                 count += Sn[i];
                 i_list.Add(i);
                 if (count >= 5)//если где-то частости меньше 5 - надо объединять. Важный пункт, без него не работало
+                    //251 страница Гмурмана
                 {
                     n_i_old.Add(count);
                     double sum = 0;
@@ -73,10 +77,9 @@ namespace PuassonGeneration
 
 
             double hi_sq = 0;
-            for (int i = 0; i < n_i.Count; i++)
-            {
+            for (int i = 0; i < n_i.Count; i++)     
                 hi_sq += Math.Pow(n_i_old[i] - n_i[i], 2) / n_i[i];
-            }
+            
 
             //хи-кважрат для уровня значимости 0.05
             double[] hi_sq_t = {3.8, 6.0, 7.8, 9.5, 11.1, 12.6, 14.1, 15.5, 16.9, 18.3, 19.7, 21, 22.4, 23.7, 25, 26.3, 27.6, 28.9, 30.1, 31.4,

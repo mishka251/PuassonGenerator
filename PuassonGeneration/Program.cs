@@ -16,7 +16,7 @@ namespace PuassonGeneration
              (t) => 1 / (t + 1),
              (t) => 1 / Math.Pow((t + 1), 2),
              (t) => 1 / Math.Exp(t + t / 2),
-             (t)=>Math.Sin(t)+2,
+             (t)=>Math.Sin(t)+1,
              (t)=>Math.Cos(t+1)+1
         };
 
@@ -31,10 +31,10 @@ namespace PuassonGeneration
             Console.WriteLine("T=");
             double.TryParse(Console.ReadLine(), out T);
 
-            Console.WriteLine("Lambda=");
-            double.TryParse(Console.ReadLine(), out lambda);
+            Console.WriteLine("Лямбда=");
+            double.TryParse(Console.ReadLine().Replace('.', ','), out lambda);
 
-            Console.WriteLine("Lambda(t): 1) 1/(t+1); 2)1/(t+1)^2; 3) 1/(e^(t+1)) 4) sin(t)+2, 5) cos(t+1)+1");
+            Console.WriteLine("Lambda(t) для неодноородного: 1) 1/(t+1); 2)1/(t+1)^2; 3) 1/(e^(t+1)) 4) sin(t)+1, 5) cos(t+1)+1");
             int.TryParse(Console.ReadLine(), out functionNumber);
         }
         /// <summary>
