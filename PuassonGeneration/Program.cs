@@ -20,8 +20,8 @@ namespace PuassonGeneration
              (t)=>Math.Cos(t+1)+1
         };
 
-        static double T, lambda;
-        static int functionNumber;
+        static double  lambda;
+        static int T, functionNumber;
 
         /// <summary>
         /// Ввод параметров
@@ -29,7 +29,7 @@ namespace PuassonGeneration
         static void Input()
         {
             Console.WriteLine("T=");
-            double.TryParse(Console.ReadLine(), out T);
+            int.TryParse(Console.ReadLine(), out T);
 
             Console.WriteLine("Лямбда=");
             double.TryParse(Console.ReadLine().Replace('.', ','), out lambda);
@@ -60,13 +60,17 @@ namespace PuassonGeneration
             Console.WriteLine("Однородный");
             WriteList(Uniform);
             Console.WriteLine();
+            
+
+            Checker.Check(Uniform, "Однородный", T);
+            Console.WriteLine("Нажмите для продллжения");
+            Console.ReadKey();
+
 
             Console.WriteLine("Неоднородный");
             WriteList(NonUniform);
             Console.WriteLine();
-
-            Checker.Check(Uniform, "Однородный");
-            Checker.Check(NonUniform, "НеОднородный");
+            Checker.Check(NonUniform, "НеОднородный", T);
 
             Console.ReadKey();
         }

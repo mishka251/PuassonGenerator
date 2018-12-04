@@ -13,21 +13,40 @@ namespace PuassonGeneration
         /// </summary>
         /// <param name="x">последовательность</param>
         /// <param name="name">Название для вывода(однродное/неоднородное)</param>
-        public static void Check(List<double> x, string name)
+        public static void Check(List<double> x, string name, int T)
         {
-            if (x.Count >= 20)
-                Console.WriteLine("Невозможно проверить " + name + " из-за переполнения при вычислении !");
-            else
-            {
-                List<int> counts = new List<int>();
-                for (int i = 0; i < x.Count; i++)
-                    counts.Add(1);
+            List<int> count_in_interval = new List<int>();
 
-                if (PuassonTest(x, counts))
-                    Console.WriteLine(name + " тест на распределение Пуассона пройден");
-                else
-                    Console.WriteLine(name + " тест на распределение Пуассона не пройден");
+            for (int i = 0; i < T; i++)
+                count_in_interval.Add(0);
+
+            for (int i = 0; i < x.Count; i++)
+
+                count_in_interval[(int)x[i]]++;
+
+            List<int> counts = new List<int>();
+
+            int max = count_in_interval.Max();
+            for (int i = 0; i <= max; i++)
+
+                counts.Add(0);
+
+            for (int i = 0; i < count_in_interval.Count; i++)
+            {
+                counts[count_in_interval[i]]++;
+                Console.WriteLine($"Элементов в промежутке {i}-{i + 1} = {count_in_interval[i]}");
             }
+
+            Console.WriteLine();
+
+            for (int i = 0; i < counts.Count; i++)
+                Console.WriteLine($"Промежутков с {i} событиями {counts[i]}");
+
+            if (PuassonTest(counts))
+                Console.WriteLine(name + " тест на распределение Пуассона пройден");
+            else
+                Console.WriteLine(name + " тест на распределение Пуассона не пройден");
+            //}
         }
         /// <summary>
         /// Проверка на соответствие распределению Пуассона на уровне значимости 0.05
@@ -37,49 +56,30 @@ namespace PuassonGeneration
         /// <param name="Sn">Список частот значений n[i]</param>
         /// <returns>true если распределеине Пуассона, иначе false</returns>
 
-        public static bool PuassonTest(List<double> S, List<int> Sn)
+        public static bool PuassonTest(List<int> Sn)
         {
-            int n = S.Count;
+            //int n = S.Count;
             double cnt = 0;
             double mid = 0;
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < Sn.Count; i++)
             {
-                mid += S[i] * Sn[i];
+                mid += i * Sn[i];
                 cnt += Sn[i];
             }
             mid /= cnt;
-
-            ///n[i] после объединения
+            Console.WriteLine($"Среднее = {mid}");
+            ///n[i] теоретическое
             var n_i = new List<double>();
-            ///n[i]` после объединения вычисленные
-            var n_i_old = new List<double>();
-            
             List<int> i_list = new List<int>();///список индексов для запоминания
-            int count = 0;
-            for (int i = 0; i < n; i++)
-            {
-                count += Sn[i];
-                i_list.Add(i);
-                if (count >= 5)//если где-то частости меньше 5 - надо объединять. Важный пункт, без него не работало
-                    //251 страница Гмурмана
-                {
-                    n_i_old.Add(count);
-                    double sum = 0;
-                    for (int j = 0; j < i_list.Count; j++)
-                        sum += (Pn(i_list[j], mid) * cnt);
-                    n_i.Add(sum);
-                    count = 0;
-                    i_list.Clear();
-                }
 
-            }
-
+            for (int i = 0; i < Sn.Count; i++)
+                n_i.Add((Pn(i, mid) * cnt));
 
 
             double hi_sq = 0;
-            for (int i = 0; i < n_i.Count; i++)     
-                hi_sq += Math.Pow(n_i_old[i] - n_i[i], 2) / n_i[i];
-            
+            for (int i = 0; i < n_i.Count; i++)
+                hi_sq += Math.Pow(Sn[i] - n_i[i], 2) / n_i[i];
+
 
             //хи-кважрат для уровня значимости 0.05
             double[] hi_sq_t = {3.8, 6.0, 7.8, 9.5, 11.1, 12.6, 14.1, 15.5, 16.9, 18.3, 19.7, 21, 22.4, 23.7, 25, 26.3, 27.6, 28.9, 30.1, 31.4,
